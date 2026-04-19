@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hiro Hamada — Portfolio</title>
+  <style>
+    /* ── TOKENS ── */
+    :root[data-theme="dark"] {
+      --bg-page:       #0c0c0c;
+      --bg-card:       #161616;
+      --bg-hover:      #1e1e1e;
+      --bg-nav:        rgba(12,12,12,0.85);
+      --border:        #262626;
+      --border-hover:  #3a3a3a;
+      --text-primary:  #ededed;
+      --text-muted:    #555;
+      --text-subtle:   #888;
+      --accent:        #ededed;
+      --accent-text:   #0c0c0c;
+      --shadow:        0 8px 32px rgba(0,0,0,0.5);
+      --shadow-sm:     0 2px 12px rgba(0,0,0,0.35);
+      --nav-blur:      blur(16px);
+    }
+    :root[data-theme="light"] {
+      --bg-page:       #f5f5f2;
+      --bg-card:       #ffffff;
+      --bg-hover:      #efefeb;
+      --bg-nav:        rgba(245,245,242,0.85);
+      --border:        #e2e0d8;
+      --border-hover:  #b8b5aa;
+      --text-primary:  #111111;
+      --text-muted:    #aaa;
+      --text-subtle:   #777;
+      --accent:        #111111;
+      --accent-text:   #ffffff;
+      --shadow:        0 8px 32px rgba(0,0,0,0.1);
+      --shadow-sm:     0 2px 12px rgba(0,0,0,0.07);
+      --nav-blur:      blur(16px);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+
+    /* ── KEYFRAMES ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 56px;
+      background: var(--bg-nav);
+      backdrop-filter: var(--nav-blur);
+      -webkit-backdrop-filter: var(--nav-blur);
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      animation: slideDown 0.5s ease both;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .nav-logo {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-subtle);
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 7px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .nav-link:hover { color: var(--text-primary); background: var(--bg-hover); }
+
+    .theme-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 0.5px solid var(--border);
+      background: var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-subtle);
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .theme-btn:hover { background: var(--bg-hover); border-color: var(--border-hover); color: var(--text-primary); }
+    .theme-btn:active { transform: scale(0.93); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 0.5px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-subtle);
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: blink 2s infinite;
+    }
+
+    .hero-name {
+      font-size: clamp(42px, 8vw, 80px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    /* ── PLACEHOLDER NAME — change this ── */
+    .hero-name span {
+      /* replace "Your Name" in the HTML below */
+    }
+
+    .hero-role {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--text-subtle);
+      font-weight: 400;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .hero-role strong {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--accent);
+      color: var(--accent-text);
+      border: none;
+      border-radius: 10px;
+      padding: 11px 22px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-primary:active { transform: scale(0.97); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: transparent;
+      color: var(--text-subtle);
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 22px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+    }
+    .btn-secondary:hover { background: var(--bg-hover); border-color: var(--border-hover); color: var(--text-primary); }
+    .btn-secondary:active { transform: scale(0.97); }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      animation: fadeIn 1s 1s ease both;
+    }
+
+    .scroll-hint svg {
+      animation: fadeUp 1s 1s infinite;
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      padding: 100px 24px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-subtle);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 3rem;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 2.5rem;
+    }
+
+    .about-card {
+      background: var(--bg-card);
+      border: 0.5px solid var(--border);
+      border-radius: 14px;
+      padding: 1.4rem 1.25rem;
+      transition: background 0.15s, border-color 0.15s, transform 0.15s;
+    }
+    .about-card:hover { background: var(--bg-hover); border-color: var(--border-hover); transform: translateY(-2px); }
+
+    .about-card-icon {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .about-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 5px;
+    }
+
+    .about-card-desc {
+      font-size: 13px;
+      color: var(--text-subtle);
+      line-height: 1.6;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 0.5px;
+      background: var(--border);
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* ── LINKS SECTION ── */
+    #links {
+      padding: 100px 24px 120px;
+    }
+
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .link-card {
+      background: var(--bg-card);
+      border: 0.5px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 1.4rem 1.3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+      opacity: 0;
+    }
+
+    .link-card.visible {
+      animation: cardIn 0.5s ease both;
+      opacity: 1;
+    }
+
+    .link-card:hover {
+      background: var(--bg-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-sm);
+    }
+    .link-card:active { transform: scale(0.97) translateY(0); }
+
+    .link-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .link-text { flex: 1; }
+
+    .link-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+
+    .link-sublabel {
+      font-size: 12px;
+      color: var(--text-subtle);
+    }
+
+    .link-arrow {
+      font-size: 15px;
+      color: var(--text-muted);
+      align-self: flex-end;
+      margin-top: auto;
+      transition: transform 0.15s, color 0.15s;
+    }
+    .link-card:hover .link-arrow { transform: translate(2px, -2px); color: var(--text-subtle); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 0.5px solid var(--border);
+      padding: 28px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: border-color 0.3s;
+    }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .fade-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-section.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav>
+    <a class="nav-logo" href="#top">YN</a>  <!-- ← change initials -->
+    <div class="nav-right">
+      <a class="nav-link" href="#about">About</a>
+      <a class="nav-link" href="#links">Links</a>
+      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">
+        <svg id="themeIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <div id="top" style="position:relative;">
+    <div class="hero">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Open to opportunities
+      </div>
+
+      <h1 class="hero-name">Hiro Hamada</h1>  <!
+
+      <p class="hero-role">
+        <strong>Robotics Student</strong> &nbsp;·&nbsp; Builder &nbsp;·&nbsp; Tinkerer
+      </p>
+
+      <div class="hero-cta-group">
+        <a class="btn-primary" href="#links">
+          View my links
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a class="btn-secondary" href="#about">About me</a>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ── ABOUT ── -->
+  <div class="divider"></div>
+  <section id="about" class="fade-section">
+    <p class="section-label">About me</p>
+    <h2 class="section-title">Passionate about robots<br>and how things work.</h2>
+    <p class="section-desc">
+      <!-- ← replace this bio with your own -->
+      I'm a robotics student fascinated by the intersection of hardware and software. I love building things, breaking things, and figuring out why they broke.
+    </p>
+
+    <div class="about-grid">
+      <div class="about-card">
+        <div class="about-card-icon">🤖</div>
+        <div class="about-card-title">Robotics</div>
+        <div class="about-card-desc">Building autonomous systems and learning how machines perceive the world.</div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">💻</div>
+        <div class="about-card-title">Software</div>
+        <div class="about-card-desc">Writing code that bridges the gap between digital logic and physical action.</div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">🔧</div>
+        <div class="about-card-title">Hardware</div>
+        <div class="about-card-desc">Getting hands-on with electronics, sensors, and mechanical systems.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── LINKS ── -->
+  <div class="divider"></div>
+  <section id="links" class="fade-section">
+    <p class="section-label">Find me online</p>
+    <h2 class="section-title">My links</h2>
+    <p class="section-desc">Places where you can find my work, projects, and what I'm up to.</p>
+
+    <div class="links-grid" id="linksGrid"></div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    Built by <strong>Your Name</strong> <!-- ← replace --> &nbsp;·&nbsp; <!-- change year if needed --> 2025
+  </footer>
+
+  <script>
+    // ─────────────────────────────────────────
+    // LINKS — customize here
+    // ─────────────────────────────────────────
+    const LINKS = [
+      {
+        label: "GitHub",
+        sublabel: "My repositories",
+        url: "https://github.com/i10101010",      // ← your GitHub URL
+        bgColor: "#1a1a1a",
+        icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.604-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>`
+      },
+      {
+        label: "Instagram",
+        sublabel: "My photos",
+        url: "https://instagram.com/",   // ← your Instagram URL
+        bgColor: "#E1306C",
+        icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`
+      },
+      {
+        label: "YouTube",
+        sublabel: "My videos",
+        url: "https://youtube.com/",    // ← your YouTube URL
+        bgColor: "#FF0000",
+        icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>`
+      }
+    ];
+
+    // ─────────────────────────────────────────
+    // RENDER LINKS
+    // ─────────────────────────────────────────
+    function renderLinks() {
+      const grid = document.getElementById("linksGrid");
+      grid.innerHTML = LINKS.map((link, i) => `
+        <a class="link-card" href="${link.url}" target="_blank" rel="noopener noreferrer" style="animation-delay: ${i * 0.1}s">
+          <div class="link-icon" style="background: ${link.bgColor};">
+            ${link.icon}
+          </div>
+          <div class="link-text">
+            <div class="link-label">${link.label}</div>
+            <div class="link-sublabel">${link.sublabel}</div>
+          </div>
+          <span class="link-arrow">↗</span>
+        </a>
+      `).join('');
+    }
+    renderLinks();
+
+    // ─────────────────────────────────────────
+    // SCROLL ANIMATIONS
+    // ─────────────────────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          // animate link cards when links section comes in
+          if (entry.target.id === 'links' || entry.target.closest('#links')) {
+            document.querySelectorAll('.link-card').forEach((card, i) => {
+              setTimeout(() => card.classList.add('visible'), i * 100);
+            });
+          }
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-section').forEach(el => observer.observe(el));
+
+    // ─────────────────────────────────────────
+    // THEME TOGGLE
+    // ─────────────────────────────────────────
+    let isDark = true;
+
+    const moonSVG = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+    const sunSVG = `
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    `;
+
+    function toggleTheme() {
+      isDark = !isDark;
+      document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+      document.getElementById("themeIcon").innerHTML = isDark ? sunSVG : moonSVG;
+    }
+  </script>
+</body>
+</html>
