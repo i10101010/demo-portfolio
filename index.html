@@ -72,6 +72,10 @@
       from { opacity: 0; transform: translateY(20px) scale(0.97); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
+    @keyframes avatarIn {
+      from { opacity: 0; transform: scale(0.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
 
     /* ── NAVBAR ── */
     nav {
@@ -143,6 +147,64 @@
       padding: 80px 24px 60px;
     }
 
+    /* ── AVATAR ── */
+    .avatar-wrap {
+      position: relative;
+      margin-bottom: 2rem;
+      animation: avatarIn 0.6s 0.05s ease both;
+    }
+
+    .avatar-ring {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      padding: 2.5px;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      transition: background 0.3s;
+    }
+
+    .avatar-inner {
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 2.5px solid var(--bg-page);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      overflow: hidden;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .avatar-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .avatar-status {
+      position: absolute;
+      bottom: 4px;
+      right: calc(50% - 50px + 4px);
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #4ade80;
+      border: 2.5px solid var(--bg-page);
+      transition: border-color 0.3s;
+    }
+
+    /* ── HERO BADGE ── */
     .hero-badge {
       display: inline-flex;
       align-items: center;
@@ -154,7 +216,7 @@
       font-weight: 500;
       color: var(--text-subtle);
       margin-bottom: 2rem;
-      animation: fadeUp 0.6s 0.1s ease both;
+      animation: fadeUp 0.6s 0.15s ease both;
     }
 
     .hero-badge-dot {
@@ -172,12 +234,7 @@
       line-height: 1.05;
       color: var(--text-primary);
       margin-bottom: 1rem;
-      animation: fadeUp 0.6s 0.2s ease both;
-    }
-
-    /* ── PLACEHOLDER NAME — change this ── */
-    .hero-name span {
-      /* replace "Your Name" in the HTML below */
+      animation: fadeUp 0.6s 0.25s ease both;
     }
 
     .hero-role {
@@ -185,7 +242,7 @@
       color: var(--text-subtle);
       font-weight: 400;
       margin-bottom: 2.5rem;
-      animation: fadeUp 0.6s 0.3s ease both;
+      animation: fadeUp 0.6s 0.35s ease both;
     }
 
     .hero-role strong {
@@ -198,7 +255,7 @@
       gap: 12px;
       flex-wrap: wrap;
       justify-content: center;
-      animation: fadeUp 0.6s 0.4s ease both;
+      animation: fadeUp 0.6s 0.45s ease both;
     }
 
     .btn-primary {
@@ -431,7 +488,7 @@
 
   <!-- ── NAVBAR ── -->
   <nav>
-    <a class="nav-logo" href="#top">YN</a>  <!-- ← change initials -->
+    <a class="nav-logo" href="#top">HH</a>
     <div class="nav-right">
       <a class="nav-link" href="#about">About</a>
       <a class="nav-link" href="#links">Links</a>
@@ -450,6 +507,19 @@
   <!-- ── HERO ── -->
   <div id="top" style="position:relative;">
     <div class="hero">
+
+      <!-- ── PROFILE PICTURE ── -->
+      <div class="avatar-wrap">
+        <div class="avatar-ring">
+          <div class="avatar-inner">
+            <!-- TO USE A PHOTO: remove "HH" and uncomment the line below -->
+            
+            <img src="_.jpeg" alt="Hiro Hamada"> -->
+          </div>
+        </div>
+        <div class="avatar-status"></div>
+      </div>
+
       <div class="hero-badge">
         <span class="hero-badge-dot"></span>
         Open to opportunities
@@ -484,7 +554,6 @@
     <p class="section-label">About me</p>
     <h2 class="section-title">Passionate about robots<br>and how things work.</h2>
     <p class="section-desc">
-      <!-- ← replace this bio with your own -->
       I'm a robotics student fascinated by the intersection of hardware and software. I love building things, breaking things, and figuring out why they broke.
     </p>
 
@@ -519,7 +588,7 @@
 
   <!-- ── FOOTER ── -->
   <footer>
-    Built by <strong>Hiro Hamada</strong> <!-- ← replace --> &nbsp;·&nbsp; <!-- change year if needed --> 2025
+    Built by <strong>Hiro Hamada</strong> &nbsp;·&nbsp; 2025
   </footer>
 
   <script>
@@ -530,21 +599,21 @@
       {
         label: "GitHub",
         sublabel: "My repositories",
-        url: "https://github.com/i10101010",      // ← your GitHub URL
+        url: "https://github.com/i10101010",
         bgColor: "#1a1a1a",
         icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.604-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>`
       },
       {
         label: "Instagram",
         sublabel: "My photos",
-        url: "https://instagram.com/",   // ← your Instagram URL
+        url: "https://instagram.com/",
         bgColor: "#E1306C",
         icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`
       },
       {
         label: "YouTube",
         sublabel: "My videos",
-        url: "https://youtube.com/",    // ← your YouTube URL
+        url: "https://youtube.com/",
         bgColor: "#FF0000",
         icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>`
       }
@@ -577,7 +646,6 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
-          // animate link cards when links section comes in
           if (entry.target.id === 'links' || entry.target.closest('#links')) {
             document.querySelectorAll('.link-card').forEach((card, i) => {
               setTimeout(() => card.classList.add('visible'), i * 100);
